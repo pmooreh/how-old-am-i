@@ -10,16 +10,27 @@ export default class App extends React.Component {
   state = {
     username: null,
     elapsedTimeMs: 0,
+    input: '',
+    startTime: undefined,
   };
 
-  componentDidMount() {
+  handleChange = event => {
+    const input = event.target.value;
+    const startTime = moment(input);
+    this.setState({
+      input,
+      ...(startTime.isValid() ? {startTime} : {startTime: undefined}),
+    });
+  };
+
+  componentDidMount = () => {
     fetch('/api/getUsername')
       .then(res => res.json())
       .then(user => this.setState({ username: user.username }));
     this.intervalId = setInterval(() => {
       this.setState({elapsedTimeMs: moment().diff(this.startTime)})
     }, 50);
-  }
+  };
 
   componentWillUnmount = () => {
     clearInterval(this.intervalId);
@@ -29,10 +40,25 @@ export default class App extends React.Component {
     const { username } = this.state;
     return (
       <section className="section">
-        <div className="content">
+        <div className="content has-text-centered">
           <h1> Hello, {username}</h1>
+          <div className="control">
+            <input
+              className="input has-text-centered"
+              type="text"
+              value={this.state.epoch} 
+              onChange={this.handleChange}
+              placeholder={'Enter your date of birth'}
+            />
+          </div>
           <Stopwatch />
-          <Duration elapsedTimeMs={this.state.elapsedTimeMs} />
+          <Duration 
+            elapsedTimeMs={
+              this.state.startTime !== undefined
+                ? moment().diff(this.state.startTime)
+                : moment.duration(0)
+            }
+          />
           <div className="field">
             <p className="control">
               <span className="select">
