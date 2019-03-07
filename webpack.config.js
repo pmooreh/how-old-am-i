@@ -1,6 +1,8 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const outputDirectory = 'dist';
 
@@ -19,8 +21,14 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.(css|sass|scss)$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            'sass-loader'
+          ],
+        }),
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
@@ -40,9 +48,11 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
+    new ExtractTextPlugin('app.css'),
     new HtmlWebpackPlugin({
       template: './public/index.html',
       favicon: './public/favicon.ico'
-    })
+    }),
+    new MomentLocalesPlugin(),
   ]
 };
