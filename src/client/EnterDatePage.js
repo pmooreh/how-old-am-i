@@ -30,27 +30,18 @@ class EnterDatePage extends React.Component {
     const { username } = this.state;
     return (
       <div className="has-text-centered">
-        <h1> Hello, {username}</h1>
-        <div className="control">
-          <input
-            className="input has-text-centered"
-            type="text"
-            value={this.state.epoch} 
-            onChange={this.handleChange}
-            placeholder={'Enter your date of birth'}
-          />
+        <h1>Hello,</h1>
+        <div className="field buttons is-centered">
+          <div className="control">
+            <input
+              className="input has-text-centered"
+              type="text"
+              value={this.state.epoch} 
+              onChange={this.handleChange}
+              placeholder={'when were you born?'}
+            />
+          </div>
         </div>
-        <Stopwatch />
-        <div className="field">
-          <p className="control">
-            <span className="select">
-              <select>
-                <option>Select dropdown</option>
-              </select>
-            </span>
-          </p>
-        </div>
-
         <div className="buttons is-centered">
           {
             (this.getIsTimeValid()) ? (
@@ -59,8 +50,6 @@ class EnterDatePage extends React.Component {
               </Link>
             ) : null
           }
-          <a className="button is-primary">Primary</a>
-          <a className="button is-link">Link</a>
         </div>
       </div>
     );
