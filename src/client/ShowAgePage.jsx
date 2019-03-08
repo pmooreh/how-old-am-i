@@ -88,7 +88,7 @@ class ShowAgePage extends React.PureComponent {
           </div>
         </div>
         <div className="has-text-centered">
-          <a href="www.actualage.org">
+          <a href="http://actualage.org">
             Share me with a friend.
           </a>
         </div>
