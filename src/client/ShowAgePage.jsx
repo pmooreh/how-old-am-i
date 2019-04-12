@@ -19,7 +19,6 @@ class ShowAgePage extends React.PureComponent {
   }
 
   render = () => {
-    console.log(this.props);
     const encodedQueryString = this.props.location.search.substring(1);
     const data = querystring.parse(encodedQueryString);
     const birthDate = moment(data.time, "x");
