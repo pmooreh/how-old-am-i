@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import querystring from 'querystring';
 import moment from 'moment';
+import { makeVcard } from './utils';
 
 class ShowAgePage extends React.PureComponent {
   state = {
@@ -21,7 +22,8 @@ class ShowAgePage extends React.PureComponent {
   render = () => {
     const encodedQueryString = this.props.location.search.substring(1);
     const data = querystring.parse(encodedQueryString);
-    const birthDate = moment(data.time, "x");
+    const birthDate = moment(data.time, 'x');
+    const vcard = makeVcard('me', birthDate);
 
     const link = this.props.location.pathname + this.props.location.search;
 
@@ -88,7 +90,10 @@ class ShowAgePage extends React.PureComponent {
         </div>
         <div className="has-text-centered">
           <a href="http://actualage.org">
-            Share me with a friend.
+            Share with a friend.
+          </a>
+          <a href={vcard.url} download={vcard.fileName}>
+            Add to contacts.
           </a>
         </div>
       </React.Fragment>

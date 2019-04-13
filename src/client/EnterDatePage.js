@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ReactImage from './react.png';
 import Stopwatch from './components/Stopwatch';
