@@ -2,7 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import querystring from 'querystring';
 import moment from 'moment';
-import { makeVcard } from './utils';
+import AgeDisplay from './components/AgeDisplay';
+import {
+  makeVcard,
+  normalizeTime,
+} from './utils';
 
 class ShowAgePage extends React.PureComponent {
   state = {
@@ -10,6 +14,7 @@ class ShowAgePage extends React.PureComponent {
   };
 
   componentDidMount = () => {
+    console.log(this.props);
     this.intervalId = setInterval(() => {
       this.setState({ currentTime: moment() })
     }, 50);
@@ -17,84 +22,42 @@ class ShowAgePage extends React.PureComponent {
 
   componentWillUnmount = () => {
     clearInterval(this.intervalId);
-  }
+  };
 
   render = () => {
     const encodedQueryString = this.props.location.search.substring(1);
     const data = querystring.parse(encodedQueryString);
     const birthDate = moment(data.time, 'x');
-    const vcard = makeVcard('me', birthDate);
-
-    const link = this.props.location.pathname + this.props.location.search;
-
-    const elapsedTimeMs = this.state.currentTime.diff(birthDate);
-
-    const duration = moment.duration(elapsedTimeMs);
-    const years = duration.years();
-    const months = duration.months();
-    const weeks = duration.weeks();
-    const days = duration.days() % 7;
-    const hours = duration.hours();
-    const minutes = duration.minutes();
-    const seconds = String(duration.seconds());
-    const milliseconds = String(duration.milliseconds()).padStart(3, '0');
-    const secondsWithMs = seconds + '.' + milliseconds.slice(0,1);
+    const shareLink = '/show?' + querystring.stringify({
+      ...data,
+      who: 'Your friend',
+    });
+    const vcard = makeVcard(data.who, birthDate);
+    console.log(shareLink);
     return (
       <React.Fragment>
-        <div className="is-size-1 has-text-weight-bold has-text-centered">
-          You
-        </div>
-        <div className="columns is-mobile">
-          <div className="column is-one-third">
-            <div className="has-text-right has-text-weight-bold">
-              were<br />
-              born<br />
-              on<br />
-              {birthDate.format('MMMM')}<br />
-              {birthDate.format('Do')},<br />
-              {birthDate.format('Y')}.<br />
-              It<br />
-              was<br />
-              a<br />
-              {birthDate.format('dddd')}.<br />
-            </div>
-          </div>
-          <div className="column is-one-third">
-            <div className="has-text-right has-text-weight-bold">
-              &nbsp;<br />
-              {years}<br />
-              {months}<br />
-              {weeks}<br />
-              {days}<br />
-              {hours}<br />
-              {minutes}<br />
-              &nbsp;<br />
-              {secondsWithMs}<br />
-              &nbsp;<br />
-            </div>
-          </div>
-          <div className="column is-one-third">
-            <div className="has-text-left has-text-weight-bold">
-              are<br />
-              year{years != 1 ? 's' : ''}<br />
-              month{months != 1 ? 's' : ''}<br />
-              week{weeks != 1 ? 's' : ''}<br />
-              day{days != 1 ? 's' : ''}<br />
-              hour{hours != 1 ? 's' : ''}<br />
-              minute{minutes != 1 ? 's' : ''}<br />
-              and<br />
-              seconds<br />
-              old.<br />
-            </div>
-          </div>
-        </div>
+        <AgeDisplay birthDate={birthDate} who={data.who} />
         <div className="has-text-centered">
-          <a href="http://actualage.org">
-            Share with a friend.
-          </a>
-          <a href={vcard.url} download={vcard.fileName}>
-            Add to contacts.
-          </a>
+          {data.who === undefined ? (
+            <p>
+              <a href={shareLink}>
+                Share with a friend.
+              </a>
+            </p>
+          ) : (
+            <React.Fragment>
+              <p>
+                <a href={vcard.url} download={vcard.fileName}>
+                  Add birthdate to contacts.
+                </a>
+              </p>
+              <p>
+                <a href="/">
+                  Do yours.
+                </a>
+              </p>
+            </React.Fragment>
+          )}
         </div>
       </React.Fragment>
     );

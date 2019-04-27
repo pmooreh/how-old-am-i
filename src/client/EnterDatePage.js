@@ -1,29 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import querystring from 'querystring';
 import ReactImage from './react.png';
 import Stopwatch from './components/Stopwatch';
 
 class EnterDatePage extends React.Component {
-  startTime = moment();
 
   state = {
     username: null,
     elapsedTimeMs: 0,
     input: '',
-    startTime: undefined,
+    birthDate: undefined,
   };
 
-  getIsTimeValid = () => this.state.startTime && this.state.startTime.isValid();
+  getIsTimeValid = () => this.state.birthDate && this.state.birthDate.isValid();
 
   getShowLink = () => {
-    return '/show?time=' + this.state.startTime.valueOf();
+    return '/show?' + querystring.stringify({time: this.state.birthDate.valueOf()});
   };
 
   handleChange = event => {
     const input = event.target.value;
-    const startTime = moment(input);
-    this.setState({ input, startTime });
+    const birthDate = moment(input);
+    this.setState({ input, birthDate });
   };
 
   render() {
@@ -38,7 +38,7 @@ class EnterDatePage extends React.Component {
               type="text"
               value={this.state.epoch} 
               onChange={this.handleChange}
-              placeholder={'when were you born?'}
+              placeholder={'Enter your birthday.'}
             />
           </div>
         </div>

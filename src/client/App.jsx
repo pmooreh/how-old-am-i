@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import EnterDatePage from './EnterDatePage';
 import ShowAgePage from './ShowAgePage';
+import ShareAgePage from './ShowAgePage';
 
 const N = () => <p>AHHHH!!! me :)</p>;
 
